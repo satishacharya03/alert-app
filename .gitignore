@@ -10,6 +10,10 @@ android/app/google-services.json
 # service account key — NEVER commit this
 alert-sas-*.json
 node_modules/
+**/node_modules/
+dist/
+.netlify/
+
 
 # ── Local build helpers (Windows-only, not needed by Netlify) ─
 generate-config.bat
@@ -28,7 +32,10 @@ android/local.properties
 *.apk
 *.aab
 
-# ── OS junk ───────────────────────────────────────────────────
+# ── IDE & OS junk ─────────────────────────────────────────────
+.idea/
+.vscode/
+*.iml
 .DS_Store
 Thumbs.db
 desktop.ini
