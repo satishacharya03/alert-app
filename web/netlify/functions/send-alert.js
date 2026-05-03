@@ -60,7 +60,7 @@ exports.handler = async (event, context) => {
                 token: token,
                 data: {
                     type: "ALERT",
-                    from: from || "AlertNow",
+                    sender_name: from || "AlertNow",
                     message: message || "Emergency Alert!",
                     sound: "alarm",
                     timestamp: String(Date.now())

@@ -36,7 +36,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
         if (data.isEmpty()) return;
 
         String type    = data.getOrDefault("type",    "");
-        String from    = data.getOrDefault("from",    "Someone");
+        String from    = data.getOrDefault("sender_name", "Someone");
         String message = data.getOrDefault("message", "You have an emergency alert!");
 
         if ("ALERT".equals(type)) {
