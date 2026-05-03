@@ -1,0 +1,34 @@
+# ============================================================
+#  .gitignore — AlertNow
+# ============================================================
+
+# ── Secrets ──────────────────────────────────────────────────
+web/.env
+web/config.js
+android/app/google-services.json
+*.json.key
+# service account key — NEVER commit this
+alert-sas-*.json
+node_modules/
+
+# ── Local build helpers (Windows-only, not needed by Netlify) ─
+generate-config.bat
+build-android.bat
+
+# ✅ COMMITTED to git (Netlify needs these):
+#    netlify.toml
+#    generate-config.js
+#    web/.env.example
+
+# ── Android build output ──────────────────────────────────────
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+*.apk
+*.aab
+
+# ── OS junk ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

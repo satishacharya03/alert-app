@@ -1,0 +1,10 @@
+{
+  "name": "alert-now",
+  "version": "1.0.0",
+  "description": "AlertNow Web & Functions",
+  "main": "generate-config.js",
+  "dependencies": {
+    "google-auth-library": "^8.9.0",
+    "node-fetch": "^2.6.11"
+  }
+}

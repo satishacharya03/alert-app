@@ -48,6 +48,28 @@
         </main>
 
         <footer style="margin-top: 2rem; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+
+            <!-- Download APK Banner -->
+            <div style="background: linear-gradient(135deg, #1a1a1a, #111); border: 1px solid #FF2D2D33; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;">
+                <p style="font-size: 0.8rem; color: #666; margin: 0 0 0.75rem 0; text-transform: uppercase; letter-spacing: 0.1em;">
+                    📱 Don't have the app yet?
+                </p>
+                <a id="download-apk-btn"
+                   href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases/latest/download/app-debug.apk"
+                   download
+                   style="display: inline-flex; align-items: center; gap: 0.6rem;
+                          background: #FF2D2D; color: #fff; text-decoration: none;
+                          padding: 0.75rem 1.5rem; border-radius: 8px;
+                          font-weight: 700; font-size: 0.95rem; letter-spacing: 0.03em;
+                          transition: background 0.2s, transform 0.15s;">
+                    <i class="fas fa-download"></i>
+                    Download AlertNow APK
+                </a>
+                <p style="font-size: 0.72rem; color: #444; margin: 0.6rem 0 0 0;">
+                    Android 8.0+ required &nbsp;·&nbsp; Allow "Install unknown apps" when prompted
+                </p>
+            </div>
+
             <a href="admin.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
                 <i class="fas fa-lock"></i> Admin Panel
             </a>
@@ -57,6 +79,8 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- Config loaded from .env via config.js — DO NOT hardcode secrets in app.js -->
+    <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

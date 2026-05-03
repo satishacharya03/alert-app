@@ -1,0 +1,6 @@
+[build]
+  command = "node generate-config.js"
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"

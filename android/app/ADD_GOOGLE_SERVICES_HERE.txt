@@ -1,7 +1,0 @@
-
-# Place your google-services.json here
-# Download it from: Firebase Console → Project Settings → Your Apps → Android app
-
-GOOGLE_SERVICES_FILE = google-services.json
-
-# This file is intentionally empty — it just reminds you to add google-services.json

@@ -1,90 +1,83 @@
-// ==========================================
-// 1. FIREBASE CONFIGURATION
-// Replace the values below with your own from Firebase Console
-// ==========================================
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
+// ============================================================
+//  app.js — AlertNow Web App Logic
+//  Secrets come from config.js (window.ALERT_CONFIG)
+//  which is generated from your .env file
+// ============================================================
 
-// Found in Firebase Console -> Project Settings -> Cloud Messaging (Legacy)
-const FCM_SERVER_KEY = "YOUR_FCM_SERVER_KEY";
-
-// Admin Credentials
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "alertnow123";
-
-// Initialize Firebase
-if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
-    firebase.initializeApp(firebaseConfig);
-} else {
-    console.warn("AlertNow: Please update your firebaseConfig in app.js");
+// ── Load config from config.js (loaded before this script in HTML) ──
+const _cfg = window.ALERT_CONFIG;
+if (!_cfg) {
+    alert("ERROR: config.js not loaded. Make sure <script src='config.js'> is above app.js in your HTML.");
+    throw new Error("ALERT_CONFIG not found");
 }
 
-const db = firebase.database();
-let targetToken = "";
-let targetUserId = "";
+const firebaseConfig  = _cfg.firebase;
+const FCM_SERVER_KEY  = _cfg.fcmServerKey;
+const ADMIN_USER      = _cfg.adminUsername;
+const ADMIN_PASS      = _cfg.adminPassword;
 
-// ==========================================
-// 2. USER FACING FUNCTIONS (index.html)
-// ==========================================
+// ── Initialize Firebase ──────────────────────────────────────
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let targetToken   = "";
+let targetUserId  = "";
+
+// ============================================================
+//  1. USER — Verify ID & Send Alert  (index.html)
+// ============================================================
 
 async function verifyId() {
-    const idInput = document.getElementById('alert-id');
+    const idInput   = document.getElementById('alert-id');
     const statusDiv = document.getElementById('verify-status');
-    const alertId = idInput.value.trim().toUpperCase();
+    const alertId   = idInput.value.trim().toUpperCase();
 
     if (!alertId) return;
 
-    statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+    statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying…';
 
     try {
         const snapshot = await db.ref('users/' + alertId).once('value');
         const userData = snapshot.val();
 
         if (userData && userData.fcmToken) {
-            targetToken = userData.fcmToken;
-            targetUserId = alertId;
-            
-            document.getElementById('step-verify').style.display = 'none';
+            targetToken   = userData.fcmToken;
+            targetUserId  = alertId;
+
+            document.getElementById('step-verify').style.display  = 'none';
             document.getElementById('step-message').style.display = 'block';
-            document.getElementById('recipient-name').innerText = `Sending to: ${userData.name}`;
+            document.getElementById('recipient-name').innerText   = `Sending to: ${userData.name}`;
         } else {
-            statusDiv.innerHTML = '<span class="status-badge status-invalid">ID Not Found or No Token</span>';
+            statusDiv.innerHTML = '<span class="status-badge status-invalid">ID Not Found</span>';
         }
-    } catch (error) {
-        console.error(error);
-        statusDiv.innerHTML = '<span class="status-badge status-invalid">Error connecting to database</span>';
+    } catch (err) {
+        console.error(err);
+        statusDiv.innerHTML = '<span class="status-badge status-invalid">Database connection error</span>';
     }
 }
 
 async function sendAlert() {
     const msg = document.getElementById('alert-msg').value.trim() || "Emergency Alert!";
     const btn = document.getElementById('send-btn');
-    
+
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING…';
 
-    const success = await triggerFCM(targetToken, msg);
+    const ok = await triggerFCM(targetToken, msg);
 
-    if (success) {
+    if (ok) {
         btn.style.background = "#22c55e";
         btn.innerHTML = '<i class="fas fa-check"></i> SENT SUCCESSFULLY';
         setTimeout(() => location.reload(), 2000);
     } else {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> FAILED - RETRY';
+        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> FAILED — RETRY';
     }
 }
 
-// ==========================================
-// 3. ADMIN FUNCTIONS (admin.html)
-// ==========================================
+// ============================================================
+//  2. ADMIN PANEL  (admin.html)
+// ============================================================
 
 function checkLogin() {
     const user = document.getElementById('admin-user').value;
@@ -101,45 +94,46 @@ function checkLogin() {
 
 function loadUsers() {
     const userList = document.getElementById('user-list');
-    
-    db.ref('users').on('value', (snapshot) => {
+
+    db.ref('users').on('value', snapshot => {
         userList.innerHTML = '';
         const users = snapshot.val();
-        
+
         if (!users) {
-            userList.innerHTML = '<div style="color: var(--text-muted);">No users registered yet.</div>';
+            userList.innerHTML = '<div style="color:var(--text-muted)">No users registered yet.</div>';
             return;
         }
 
-        for (let id in users) {
-            const user = users[id];
+        for (const id in users) {
+            const u    = users[id];
             const card = document.createElement('div');
             card.className = 'user-card glass';
             card.innerHTML = `
                 <div class="user-info">
-                    <h3>${user.name}</h3>
+                    <h3>${u.name}</h3>
                     <p>${id}</p>
-                    <div style="margin-top: 1rem;">
-                        <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" 
-                                onclick="quickAlert('${user.fcmToken}', '${user.name}', '${id}')">
+                    <small style="color:var(--text-muted);font-size:0.75rem">
+                        Last seen: ${u.lastSeen ? new Date(u.lastSeen).toLocaleString() : 'Unknown'}
+                    </small>
+                    <div style="margin-top:1rem">
+                        <button class="btn btn-primary"
+                                style="padding:0.5rem 1rem;font-size:0.8rem"
+                                onclick="quickAlert('${u.fcmToken}','${u.name}','${id}')">
                             <i class="fas fa-bell"></i> Alert
                         </button>
                     </div>
-                </div>
-            `;
+                </div>`;
             userList.appendChild(card);
         }
     });
 }
 
 function quickAlert(token, name, id) {
-    targetToken = token;
+    targetToken  = token;
     targetUserId = id;
-    document.getElementById('step-verify').style.display = 'none';
-    document.getElementById('step-message').style.display = 'block';
-    document.getElementById('recipient-name').innerText = `Sending to: ${name}`;
-    // Scroll to message if needed or just use a modal (skipped for brevity)
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // If on admin page, show an inline prompt or redirect
+    const msg = prompt(`Send emergency message to ${name}:`);
+    if (msg) triggerFCM(token, msg).then(ok => alert(ok ? "✅ Alert sent!" : "❌ Failed to send"));
 }
 
 function showBroadcastModal() {
@@ -153,17 +147,15 @@ function closeModal() {
 async function sendBroadcast() {
     const msg = document.getElementById('broadcast-msg').value.trim() || "Global Emergency Alert!";
     const btn = document.querySelector('#broadcast-modal .btn-danger');
-    
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> BROADCASTING...';
 
-    // In a real app, you'd use FCM topics, but for this simple version 
-    // we'll send to all tokens in the database
+    btn.disabled  = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> BROADCASTING…';
+
     const snapshot = await db.ref('users').once('value');
-    const users = snapshot.val();
-    
+    const users    = snapshot.val();
+
     let count = 0;
-    for (let id in users) {
+    for (const id in users) {
         if (users[id].fcmToken) {
             await triggerFCM(users[id].fcmToken, msg);
             count++;
@@ -173,47 +165,36 @@ async function sendBroadcast() {
     btn.innerHTML = `<i class="fas fa-check"></i> SENT TO ${count} USERS`;
     setTimeout(() => {
         closeModal();
-        btn.disabled = false;
+        btn.disabled  = false;
         btn.innerHTML = '<i class="fas fa-broadcast-tower"></i> SEND TO ALL USERS';
     }, 3000);
 }
 
-// ==========================================
-// 4. CORE FCM TRIGGER (Shared)
-// ==========================================
+// ============================================================
+//  3. CORE FCM TRIGGER  (shared)
+// ============================================================
+
+// ============================================================
+//  3. CORE FUNCTION TRIGGER (Modern Secure Way)
+// ============================================================
 
 async function triggerFCM(token, message) {
-    if (FCM_SERVER_KEY === "YOUR_FCM_SERVER_KEY") {
-        alert("Please set your FCM_SERVER_KEY in app.js");
-        return false;
-    }
-
-    const payload = {
-        to: token,
-        data: {
-            type: "ALERT",
-            from: "AlertNow Admin",
-            message: message,
-            sound: "alarm",
-            timestamp: new Date().getTime()
-        },
-        priority: "high"
-    };
-
     try {
-        const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+        const response = await fetch('/.netlify/functions/send-alert', {
             method: 'POST',
-            headers: {
-                'Authorization': 'key=' + FCM_SERVER_KEY,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                token: token,
+                message: message,
+                from: "AlertNow Web"
+            })
         });
-
-        const data = await response.json();
-        return data.success === 1;
-    } catch (error) {
-        console.error("FCM Error:", error);
+        
+        const result = await response.json();
+        console.log("Netlify Function response:", result);
+        return result.success === true;
+    } catch (err) {
+        console.error("Netlify Function Error:", err);
         return false;
     }
 }
