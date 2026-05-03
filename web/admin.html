@@ -57,16 +57,17 @@
             </button>
         </div>
     </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <script src="app.js"></script>
-    <script>
+    <script src="config.js"></script>
+ <script>
         // Check login on load
         if (sessionStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('login-modal').style.display = 'none';
             loadUsers();
         }
     </script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="app.js"></script>
+   
 </body>
 </html>
