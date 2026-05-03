@@ -6,7 +6,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.Activity;
 
 /**
  * AlertFullScreenActivity
@@ -20,15 +20,19 @@ import androidx.appcompat.app.AppCompatActivity;
  *   FLAG_SHOW_WHEN_LOCKED — renders above the keyguard / lock screen
  *   FLAG_TURN_SCREEN_ON   — wakes the device display
  */
-public class AlertFullScreenActivity extends AppCompatActivity {
+public class AlertFullScreenActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Keep screen alive and show above lock screen
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true);
+            setTurnScreenOn(true);
+        }
         getWindow().addFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON   |
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON |
             WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
             WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         );

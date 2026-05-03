@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,11 +85,12 @@ public class MainActivity extends AppCompatActivity {
         checkDndPermission();
     }
 
-    // ── Re-check DND whenever the user returns from Settings ───────
+    // ── Re-check permissions whenever the user returns from Settings ───────
     @Override
     protected void onResume() {
         super.onResume();
         checkDndPermission();
+        checkOverlayPermission();
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -189,10 +191,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestDndPermission() {
-        // Takes the user to the system "Do Not Disturb access" settings page.
-        // Android enforces that the user must enable this manually — the app
-        // cannot do it on its own, which is by design for privacy/security.
         startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    //  Overlay / Display over other apps permission
+    // ──────────────────────────────────────────────────────────────
+    private void checkOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                // If we don't have it, prompt the user
+                Toast.makeText(this, "Please allow 'Display over other apps' so alerts can pop up immediately.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
+        }
     }
 
     // ──────────────────────────────────────────────────────────────
