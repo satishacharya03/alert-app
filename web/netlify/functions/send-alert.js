@@ -8,22 +8,37 @@ exports.handler = async (event, context) => {
     }
 
     try {
+        if (!event.body) {
+            return { statusCode: 400, body: JSON.stringify({ success: false, error: "Missing request body" }) };
+        }
+
         const { token, message, from } = JSON.parse(event.body);
+
+        if (!token) {
+            return { statusCode: 400, body: JSON.stringify({ success: false, error: "Missing recipient token" }) };
+        }
 
         // 1. Get Service Account
         let serviceAccount;
         if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-            serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            try {
+                serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            } catch (e) {
+                return { statusCode: 500, body: JSON.stringify({ success: false, error: "Invalid JSON in FIREBASE_SERVICE_ACCOUNT environment variable." }) };
+            }
         } else {
-            // Fallback for local testing if the JSON file is present in the root folder
+            // Fallback for local testing
             try {
                 const fs = require('fs');
                 const path = require('path');
-                // Path resolving out of web/netlify/functions to the root
                 const keyPath = path.join(__dirname, '..', '..', '..', 'alert-sas-c981d0cdd77f.json');
-                serviceAccount = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
+                if (fs.existsSync(keyPath)) {
+                    serviceAccount = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
+                } else {
+                    return { statusCode: 500, body: JSON.stringify({ success: false, error: "FIREBASE_SERVICE_ACCOUNT is not set in Netlify Environment Variables." }) };
+                }
             } catch (err) {
-                throw new Error("Missing FIREBASE_SERVICE_ACCOUNT in Netlify Env Vars, and local JSON key not found.");
+                return { statusCode: 500, body: JSON.stringify({ success: false, error: "Failed to load service account key locally or from environment." }) };
             }
         }
         
@@ -33,7 +48,8 @@ exports.handler = async (event, context) => {
             scopes: ['https://www.googleapis.com/auth/firebase.messaging'],
         });
         const client = await auth.getClient();
-        const accessToken = (await client.getAccessToken()).token;
+        const credentials = await client.getAccessToken();
+        const accessToken = credentials.token;
 
         // 3. Prepare FCM v1 Payload
         const projectId = serviceAccount.project_id;
@@ -45,7 +61,7 @@ exports.handler = async (event, context) => {
                 data: {
                     type: "ALERT",
                     from: from || "AlertNow",
-                    message: message,
+                    message: message || "Emergency Alert!",
                     sound: "alarm",
                     timestamp: String(Date.now())
                 },
@@ -67,9 +83,16 @@ exports.handler = async (event, context) => {
 
         const result = await response.json();
         
+        if (response.status !== 200) {
+            return {
+                statusCode: response.status,
+                body: JSON.stringify({ success: false, error: result.error ? result.error.message : "FCM API Error" }),
+            };
+        }
+
         return {
             statusCode: 200,
-            body: JSON.stringify({ success: !!result.name, data: result }),
+            body: JSON.stringify({ success: true, data: result }),
         };
 
     } catch (error) {
