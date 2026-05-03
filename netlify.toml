@@ -1,0 +1,13 @@
+[build]
+  # Step 1: Generate config.js from Env Vars
+  # Step 2: No actual build step needed for simple HTML/JS, but we can do a dummy command
+  command = "node generate-config.js"
+  publish = "web"
+
+[functions]
+  directory = "web/netlify/functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
