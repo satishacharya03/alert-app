@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "447232499569",
+    "firebase_url": "https://alert-sas-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "alert-sas",
+    "storage_bucket": "alert-sas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447232499569:android:c850e086b4119b2f2220d0",
+        "android_client_info": {
+          "package_name": "com.alert.fake"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKiYhSoYw-_xwqpzBWVD-2UA91e2CEYCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

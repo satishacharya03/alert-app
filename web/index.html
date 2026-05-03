@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertNow | Send Instant Phone Alert</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container glass">
+        <header>
+            <div class="logo"><i class="fas fa-bell"></i> AlertNow</div>
+            <p class="tagline">Bypass silence. Reach them instantly.</p>
+        </header>
+
+        <main>
+            <!-- Step 1: Verify ID -->
+            <div id="step-verify">
+                <div class="form-group">
+                    <label for="alert-id">Target Alert ID</label>
+                    <div class="input-with-action">
+                        <input type="text" id="alert-id" placeholder="e.g. FIRE-2947" autocomplete="off">
+                        <button class="btn btn-primary btn-verify" onclick="verifyId()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="verify-status"></div>
+                </div>
+            </div>
+
+            <!-- Step 2: Send Message (Hidden initially) -->
+            <div id="step-message" style="display: none; animation: fadeIn 0.5s ease-out;">
+                <div class="form-group">
+                    <label>Recipient</label>
+                    <div id="recipient-name" style="font-weight: 600; color: var(--primary); margin-bottom: 1rem;"></div>
+                    
+                    <label for="alert-msg">Emergency Message</label>
+                    <textarea id="alert-msg" rows="4" placeholder="Wake up! It's urgent."></textarea>
+                </div>
+                <button class="btn btn-danger" onclick="sendAlert()" id="send-btn">
+                    <i class="fas fa-bolt"></i> SEND LOUD ALERT
+                </button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+                    <i class="fas fa-info-circle"></i> This will play a loud sound even if their phone is on silent.
+                </p>
+            </div>
+        </main>
+
+        <footer style="margin-top: 2rem; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+            <a href="admin.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+                <i class="fas fa-lock"></i> Admin Panel
+            </a>
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

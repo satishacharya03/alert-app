@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertNow Admin | Control Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container container">
+        <div class="action-bar">
+            <div class="logo" style="margin-bottom: 0;"><i class="fas fa-shield-alt"></i> Admin Panel</div>
+            <button class="btn btn-primary" onclick="showBroadcastModal()">
+                <i class="fas fa-bullhorn"></i> Broadcast All
+            </button>
+        </div>
+
+        <div class="glass" style="padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1rem; font-weight: 600;">Registered Users</h2>
+            <div id="user-list" class="user-grid">
+                <!-- User cards will be injected here -->
+                <div style="color: var(--text-muted);">Loading users...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal" style="display: flex;">
+        <div class="modal-content glass">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Admin Login</h2>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="admin-user" value="admin">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="admin-pass" placeholder="Enter admin password">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="checkLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Broadcast Modal -->
+    <div id="broadcast-modal" class="modal">
+        <div class="modal-content glass">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Broadcast Message</h2>
+                <i class="fas fa-times" onclick="closeModal()" style="cursor: pointer;"></i>
+            </div>
+            <div class="form-group">
+                <label>Emergency Message</label>
+                <textarea id="broadcast-msg" rows="4" placeholder="This will ring EVERY registered phone!"></textarea>
+            </div>
+            <button class="btn btn-danger" onclick="sendBroadcast()">
+                <i class="fas fa-broadcast-tower"></i> SEND TO ALL USERS
+            </button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Check login on load
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            document.getElementById('login-modal').style.display = 'none';
+            loadUsers();
+        }
+    </script>
+</body>
+</html>
