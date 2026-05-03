@@ -52,9 +52,8 @@ public class AlertFullScreenActivity extends AppCompatActivity {
     }
 
     private void dismiss() {
-        // Cancel any ongoing vibration
-        Vibrator vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        if (vib != null) vib.cancel();
+        // Stop the alarm and vibration
+        MyFirebaseService.stopAlarm();
 
         // Bring the app to the foreground so it doesn't leave a black screen
         finish();

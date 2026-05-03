@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     activity_alert.xml — Full-screen alarm UI
-    This is the big red screen shown when an alert arrives.
-    Rendered above the lock screen when the device is asleep.
+    This is now styled as a modern SMS-like popup over a translucent blurred background.
 -->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="#CC0000"
-    android:padding="32dp">
+    android:background="#B3000000"
+    android:gravity="center">
 
-    <!-- Flashing emoji / icon -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🚨"
-        android:textSize="80sp"
-        android:layout_marginBottom="24dp"/>
-
-    <!-- "ALERT" heading -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ALERT"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:letterSpacing="0.2"
-        android:layout_marginBottom="8dp"/>
-
-    <!-- Sender name -->
-    <TextView
-        android:id="@+id/tvAlertFrom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="#FFCCCC"
-        android:layout_marginBottom="32dp"/>
-
-    <!-- Message body -->
-    <TextView
-        android:id="@+id/tvAlertMessage"
+    <!-- Popup Card -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textColor="#FFFFFF"
-        android:textAlignment="center"
-        android:lineSpacingMultiplier="1.4"
-        android:background="#99000000"
-        android:padding="20dp"
-        android:layout_marginBottom="56dp"/>
+        android:layout_margin="32dp"
+        android:orientation="vertical"
+        android:background="@drawable/popup_bg"
+        android:elevation="8dp">
 
-    <!-- Dismiss button -->
-    <Button
-        android:id="@+id/btnDismiss"
-        android:layout_width="220dp"
-        android:layout_height="60dp"
-        android:text="DISMISS"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:textColor="#CC0000"
-        android:backgroundTint="#FFFFFF"/>
+        <!-- Header / Sender -->
+        <TextView
+            android:id="@+id/tvAlertFrom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Message"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:paddingBottom="8dp"
+            android:paddingHorizontal="20dp" />
 
-</LinearLayout>
+        <!-- Message Body -->
+        <TextView
+            android:id="@+id/tvAlertMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.2"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="24dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <!-- OK / Clear All Button -->
+        <Button
+            android:id="@+id/btnDismiss"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="OK"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#007AFF"
+            android:background="?android:attr/selectableItemBackground"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</RelativeLayout>

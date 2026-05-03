@@ -26,6 +26,8 @@ import java.util.Map;
 public class MyFirebaseService extends FirebaseMessagingService {
 
     private static final String TAG = "AlertNowFCM";
+    private static MediaPlayer mp;
+    private static Vibrator currentVibrator;
 
     // ── Receive a push message ─────────────────────────────────────
     @Override
@@ -118,12 +120,11 @@ public class MyFirebaseService extends FirebaseMessagingService {
     // ──────────────────────────────────────────────────────────────
     private void ringAlarm() {
         try {
-            Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            if (alarmUri == null) {
-                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            }
+            stopAlarm(); // Stop any existing alarm first
+            
+            Uri alarmUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.alert);
 
-            final MediaPlayer mp = new MediaPlayer();
+            mp = new MediaPlayer();
             mp.setAudioAttributes(new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -139,16 +140,25 @@ public class MyFirebaseService extends FirebaseMessagingService {
 
             mp.start();
 
-            // Auto-stop after 30 seconds
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                if (mp.isPlaying()) {
-                    mp.stop();
-                }
-                mp.release();
-            }, 30_000);
+            // Auto-stop after 60 seconds as a fallback
+            new Handler(Looper.getMainLooper()).postDelayed(MyFirebaseService::stopAlarm, 60_000);
 
         } catch (Exception e) {
             Log.e(TAG, "ringAlarm failed: " + e.getMessage());
+        }
+    }
+
+    public static void stopAlarm() {
+        if (mp != null) {
+            if (mp.isPlaying()) {
+                mp.stop();
+            }
+            mp.release();
+            mp = null;
+        }
+        if (currentVibrator != null) {
+            currentVibrator.cancel();
+            currentVibrator = null;
         }
     }
 
@@ -156,14 +166,14 @@ public class MyFirebaseService extends FirebaseMessagingService {
     //  Vibrate in a repeating SOS-style pattern
     // ──────────────────────────────────────────────────────────────
     private void vibratePhone() {
-        Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        if (v == null || !v.hasVibrator()) return;
+        currentVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        if (currentVibrator == null || !currentVibrator.hasVibrator()) return;
 
         long[] pattern = {0, 500, 200, 500, 200, 800};   // off, on, off, on …
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createWaveform(pattern, 0));  // 0 = loop
+            currentVibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));  // 0 = loop
         } else {
-            v.vibrate(pattern, 0);
+            currentVibrator.vibrate(pattern, 0);
         }
     }
 }
