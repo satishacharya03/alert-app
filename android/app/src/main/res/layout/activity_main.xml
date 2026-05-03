@@ -168,6 +168,17 @@
                 android:textColor="#FFFFFF"
                 android:visibility="gone"/>
 
+            <!-- Fail-safe Stop Alarm button -->
+            <Button
+                android:id="@+id/btnStopAlarm"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="🛑 STOP ALARM"
+                android:backgroundTint="#8B0000"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="24dp"
+                android:visibility="visible"/>
+
         </LinearLayout>
 
         <!-- ── Bottom padding ──────────────────────────────── -->

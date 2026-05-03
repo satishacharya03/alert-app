@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     // ── View references ────────────────────────────────────────────
     private TextView  tvMyId, tvStatus, tvDndStatus;
     private EditText  etName;
-    private Button    btnCreate, btnCopyId, btnDndPermission;
+    private Button    btnCreate, btnCopyId, btnDndPermission, btnStopAlarm;
     private LinearLayout layoutCreate, layoutCreated;
 
     // ── Firebase ───────────────────────────────────────────────────
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         btnCreate        = findViewById(R.id.btnCreate);
         btnCopyId        = findViewById(R.id.btnCopyId);
         btnDndPermission = findViewById(R.id.btnDndPermission);
+        btnStopAlarm     = findViewById(R.id.btnStopAlarm);
         layoutCreate     = findViewById(R.id.layoutCreate);
         layoutCreated    = findViewById(R.id.layoutCreated);
 
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(v        -> createAlertId());
         btnCopyId.setOnClickListener(v        -> copyId());
         btnDndPermission.setOnClickListener(v -> requestDndPermission());
+        btnStopAlarm.setOnClickListener(v -> {
+            MyFirebaseService.stopAlarm();
+            Toast.makeText(this, "Alarm stopped", Toast.LENGTH_SHORT).show();
+        });
 
         checkDndPermission();
     }
