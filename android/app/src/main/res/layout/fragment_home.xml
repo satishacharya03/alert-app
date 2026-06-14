@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#080808"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🛡️ Super Dashboard"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FF2D2D"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personal Safety, Redefined."
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- SOS Readiness Card -->
+        <LinearLayout
+            android:id="@+id/cardSosStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#111111"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🛡️ SOS READINESS"
+                android:textColor="#888"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tvSosAccessibilityStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚠️  Auto-Enable: NOT configured"
+                android:textColor="#FF4444"
+                android:textSize="13sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/tvSosLocationStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚠️  Location: NOT granted"
+                android:textColor="#FF4444"
+                android:textSize="13sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/tvSosSmsStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚠️  SMS: NOT granted"
+                android:textColor="#FF4444"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+
+        <!-- CREATE SECTION -->
+        <LinearLayout
+            android:id="@+id/layoutCreate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#111111"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create your AlertID"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#F0EDE8"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Your name"
+                android:textColorHint="#555555"
+                android:textColor="#F0EDE8"
+                android:background="#181818"
+                android:padding="14dp"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btnCreate"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Create My Alert ID"
+                android:backgroundTint="#FF2D2D"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- CREATED SECTION -->
+        <LinearLayout
+            android:id="@+id/layoutCreated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:background="#111111"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOUR ALERT ID"
+                android:textSize="11sp"
+                android:letterSpacing="0.15"
+                android:textColor="#666666"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tvMyId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="42sp"
+                android:textStyle="bold"
+                android:textColor="#FF2D2D"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnCopyId"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="📋  Copy ID &amp; Share"
+                android:backgroundTint="#1A1A1A"
+                android:textColor="#F0EDE8"
+                android:layout_marginBottom="24dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1F1F1F"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:id="@+id/tvDndStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="#FF2D2D"
+                android:layout_marginBottom="12dp"/>
+
+            <Button
+                android:id="@+id/btnDndPermission"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Enable DND Bypass"
+                android:backgroundTint="#FF2D2D"
+                android:textColor="#FFFFFF"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btnStopAlarm"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="🛑 STOP ALARM"
+                android:backgroundTint="#8B0000"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="24dp"/>
+        </LinearLayout>
+        
+        <View android:layout_width="match_parent" android:layout_height="48dp"/>
+    </LinearLayout>
+</ScrollView>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AlertNow</string>
+    <string name="accessibility_service_description">AlertNow uses Accessibility to automatically enable Wi-Fi, Mobile Data, and GPS during an emergency SOS. It will briefly open Quick Settings and tap those tiles. No personal data is read or stored.</string>
 </resources>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#080808"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚙️ Super App Settings"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FF2D2D"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- ══ SOS POWER SETUP ══════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1A1A1A"
+            android:padding="20dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔋 SOS Power Setup"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFF"
+                android:layout_marginBottom="6dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grant these two permissions ONCE so the app can auto-enable Wi-Fi, Mobile Data and GPS during an emergency."
+                android:textColor="#888"
+                android:textSize="13sp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Accessibility Status -->
+            <TextView
+                android:id="@+id/tvAccessibilityStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚠️  Accessibility: NOT granted"
+                android:textColor="#FF4444"
+                android:textSize="13sp"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnEnableAccessibility"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Enable SOS Accessibility Service"
+                android:backgroundTint="#FF2D2D"
+                android:textColor="#FFF"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- WRITE_SECURE_SETTINGS note -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔑 ADB Boost (optional — enables GPS directly without UI):"
+                android:textColor="#FFF"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="adb shell pm grant com.alertnow android.permission.WRITE_SECURE_SETTINGS"
+                android:textColor="#00E5FF"
+                android:textSize="11sp"
+                android:background="#0D0D0D"
+                android:padding="8dp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Run this once from your PC to allow the app to toggle GPS without touching the screen."
+                android:textColor="#666"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+
+        <!-- Secret SMS Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Offline SMS SOS"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:layout_marginBottom="8dp"/>
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trigger keyword to sound the alarm when offline."
+            android:textColor="#666"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etSecretWord"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="e.g. EMERGENCY_SOS"
+            android:textColorHint="#555"
+            android:textColor="#FFF"
+            android:background="#181818"
+            android:padding="14dp"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnSaveSecret"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Save Keyword"
+            android:backgroundTint="#FF2D2D"
+            android:textColor="#FFF"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Battery SOS Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Low Battery SOS"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:layout_marginBottom="8dp"/>
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency contact to text when battery drops below 5%."
+            android:textColor="#666"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etSosContact"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:textColorHint="#555"
+            android:textColor="#FFF"
+            android:background="#181818"
+            android:padding="14dp"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnSaveContact"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Save SOS Contact"
+            android:backgroundTint="#FF2D2D"
+            android:textColor="#FFF"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Location Permissions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location Tracking"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:layout_marginBottom="8dp"/>
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Needed to auto-share your location when an SMS SOS is received."
+            android:textColor="#666"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnReqLocation"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Grant Location Permission"
+            android:backgroundTint="#1A1A1A"
+            android:textColor="#FFF"/>
+
+    </LinearLayout>
+</ScrollView>

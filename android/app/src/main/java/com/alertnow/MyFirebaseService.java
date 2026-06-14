@@ -49,10 +49,10 @@ public class MyFirebaseService extends FirebaseMessagingService {
             showFullScreenNotification(from, message);
 
             // ③ Ring the alarm stream (bypasses silent mode)
-            ringAlarm();
+            ringAlarm(this);
 
             // ④ Vibrate
-            vibratePhone();
+            vibratePhone(this);
         }
     }
 
@@ -118,23 +118,23 @@ public class MyFirebaseService extends FirebaseMessagingService {
     //  USAGE_ALARM is a separate volume channel from the ringer —
     //  it plays even when the phone is on silent.
     // ──────────────────────────────────────────────────────────────
-    private void ringAlarm() {
+    public static void ringAlarm(android.content.Context context) {
         try {
             stopAlarm(); // Stop any existing alarm first
             
-            Uri alarmUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.alert);
+            Uri alarmUri = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.alert);
 
             mp = new MediaPlayer();
             mp.setAudioAttributes(new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build());
-            mp.setDataSource(this, alarmUri);
+            mp.setDataSource(context, alarmUri);
             mp.setLooping(true);
             mp.prepare();
 
             // Max out the alarm volume so it cannot be missed
-            AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+            AudioManager am = (AudioManager) context.getSystemService(android.content.Context.AUDIO_SERVICE);
             int maxVol = am.getStreamMaxVolume(AudioManager.STREAM_ALARM);
             am.setStreamVolume(AudioManager.STREAM_ALARM, maxVol, 0);
 
@@ -165,8 +165,8 @@ public class MyFirebaseService extends FirebaseMessagingService {
     // ──────────────────────────────────────────────────────────────
     //  Vibrate in a repeating SOS-style pattern
     // ──────────────────────────────────────────────────────────────
-    private void vibratePhone() {
-        currentVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+    public static void vibratePhone(android.content.Context context) {
+        currentVibrator = (Vibrator) context.getSystemService(android.content.Context.VIBRATOR_SERVICE);
         if (currentVibrator == null || !currentVibrator.hasVibrator()) return;
 
         long[] pattern = {0, 500, 200, 500, 200, 800};   // off, on, off, on …
